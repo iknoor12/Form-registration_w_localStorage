@@ -6,8 +6,13 @@ style.textContent=`
         display: grid;
         gap: 1em;
         justify-content: center;
+        justify-items: center;
         margin: 0;
         background-color: #fff7f4;
+    }
+
+    h1 {
+        margin-top: 2em;
     }
 
     form {
@@ -15,14 +20,16 @@ style.textContent=`
         gap: 2em;
         justify-content: center;
         border: 2px solid black;
-        padding: 2em;
+        width: 20em;
+        padding: 2em 1em;
+        font-size: 1.4em;
         background-color: #e8ac9e;
         border-radius: 1em;
         box-shadow: 4px 4px 8px 5px rgba(182, 173, 173, 1);
     }
 
     input {
-        font-size: 0.8em;
+        font-size: 0.7em;
         padding: 0.4rem 0.7em;
         border-radius: 0.5em;
         background-color: #fff7f4;
@@ -35,7 +42,7 @@ style.textContent=`
     .radiobtn {
         margin-left: 1em;
         margin-right: 0.7em;
-        transform: scale(1.2);
+        transform: scale(1.4);
     }
 
     #stateSelect {
@@ -243,11 +250,18 @@ function togglepassword() {
   }
 }
 
-submitBtn.addEventListener('click', (e) => {
+form.addEventListener('submit', (e) => {
     e.preventDefault();
     alert('Form is submitted!');
 
-    // localStorage.setItem(label1, label1.value);
-    console.log(label1, label1.value);
+    let inputs = this.querySelectorAll("input");
+
+    inputs.forEach(input => {
+        if ((input.type === "radio" && input.checked) || input.type !== "radio") {
+        localStorage.setItem(input.name, input.value); // name as key, value as value
+        }
+    });
+
+    alert('saved in localstorage!');
 
 });
