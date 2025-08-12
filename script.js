@@ -99,6 +99,7 @@ input1.id='nameInput';
 input1.setAttribute('name', 'Username');
 input1.setAttribute('type', 'text');
 input1.setAttribute('placeholder', 'Enter your name ');
+input1.setAttribute('name', Math.random().toString(36).substring(2)); // to prevent the autofill of e-mail 
 label1.appendChild(input1);
 
 
@@ -250,17 +251,46 @@ function togglepassword() {
   }
 }
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', function (e) {
     e.preventDefault();
+    localStorage.clear();
     alert('Form is submitted!');
+
+    let formData = {};
 
     let inputs = this.querySelectorAll("input");
 
     inputs.forEach(input => {
-        if ((input.type === "radio" && input.checked) || input.type !== "radio") {
-        localStorage.setItem(input.name, input.value); // name as key, value as value
+        let key;
+
+        if (input.type !== "radio") {
+             if (input.placeholder.trim() === "Enter your name") {
+                key = "Username";
+            } else if (input.placeholder === "Enter your age") {
+                key = "Age";
+            } else if (input.placeholder === "Enter your email") {
+                key = "Email";
+            } else if (input.placeholder === "Enter your password") {
+                key = "Pass";
+            } else {
+                key = input.name; // fallback
+            }
+            formData[key] = input.value;
+
+        } else {
+             if (input.checked) {
+                key = "Gender";
+                formData[key] = input.value;
+            }   
         }
     });
+
+    // Save the select dropdown (State)
+    let stateSelect = this.querySelector("#stateSelect");
+    formData[stateSelect.name] = stateSelect.value;
+
+    // Save the whole object in localStorage
+    localStorage.setItem("formData", JSON.stringify(formData));
 
     alert('saved in localstorage!');
 
